@@ -2,7 +2,7 @@
 
 云原生 / Kubernetes 方向，主要用 Go。相信「把手弄脏」是学会一件事的最短路径——所以这个账号里的仓库，都是**真的在跑、真的踩过坑**的东西。
 
-## 🔭 正在做：[KubeSentry](https://github.com/weirong-ui/kubesentry)
+## 🔭 正在做：[KubeStasis](https://github.com/weirong-ui/kubesentry)
 
 基于 controller-runtime 的 Kubernetes Operator：**Prometheus 多信号弹性伸缩 + 分级故障自愈**。不满足于 HPA「只伸缩、不自愈」，想做一个能让应用自己变强、自己疗伤的控制系统。
 
