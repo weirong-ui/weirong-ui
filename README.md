@@ -30,9 +30,6 @@
 
 `controller-runtime` · `client-go` · `kubebuilder` · `PromQL` · `kustomize`
 
-## 📊 GitHub 统计
-
-<p>
   <img src="https://github-readme-stats.vercel.app/api?username=weirong-ui&show_icons=true&hide_border=true&count_private=true" height="150"/>
   <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=weirong-ui&layout=compact&hide_border=true" height="150"/>
 </p>
