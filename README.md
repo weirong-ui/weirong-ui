@@ -2,13 +2,16 @@
 
 云原生 / Kubernetes 方向，主要用 Go。相信「把手弄脏」是学会一件事的最短路径——所以这个账号里的仓库，都是**真的在跑、真的踩过坑**的东西。
 
-## 🔭 正在做：[KubeStasis](https://github.com/weirong-ui/kubesentry)
+## 🔭 正在做：[KubeStasis](https://github.com/weirong-ui/kubestasis)（原名 KubeSentry）
 
-基于 controller-runtime 的 Kubernetes Operator：**Prometheus 多信号弹性伸缩 + 分级故障自愈**。不满足于 HPA「只伸缩、不自愈」，想做一个能让应用自己变强、自己疗伤的控制系统。
+基于 controller-runtime 的 Kubernetes Operator：**Prometheus 多信号弹性伸缩 + 分级故障自愈 + 准入控制**。不满足于 HPA「只伸缩、不自愈」，想做一个能让应用自己变强、自己疗伤的控制系统。
 
-- ✅ **P0 已闭环**：`App` CRD → 自动管理 Deployment/Service，Status/Conditions/Events 真实回写，28 个单测用例
-- 🚧 **进行中**：QPS / P99 / 错误率多信号伸缩的端到端验证（冷却窗口 + 迟滞抑震算法已落地）
-- 🗓 **规划**：故障自愈引擎（CrashLoop/OOM/5xx 分级处置）、金丝雀观察自动回滚、Admission Webhook、手写 mini-Informer、Helm Chart
+- ✅ **P0–P4 全部闭环**：`App` CRD → Deployment/Service 自动管理；弹性伸缩（真 Prometheus 打流验证 1→5→1）；分级自愈（CrashLoop → 摘除 → 自动回滚，真集群 + CI 双验证）；金丝雀错误率自动回滚
+- ✅ **Admission Webhook**：禁 latest / 跨字段校验 / 默认值注入，自签证书方案不依赖 cert-manager；cosign keyless 镜像签名 + Kyverno 策略（CKS 证据链）
+- ✅ **手写 mini-Informer**：ListWatch → DeltaFIFO → Store → WorkQueue，约 400 行泛型实现
+- ✅ **AI 推理弹性**：队列深度 / TTFT / KV cache 占用率三信号，vLLM 开箱即用
+- 🧪 **100 个单元测试用例**，CI 四道门：docs / build / e2e（kind 真集群三条链路）/ 多架构镜像
+- 🗓 **进行中**：压测对比表（vs 原生 HPA）、envtest、Helm Chart
 
 ## 📖 学习笔记：[cloud-native-notes](https://github.com/weirong-ui/cloud-native-notes)
 
@@ -18,7 +21,7 @@
 机制是什么 → 源码/命令在哪 → 我怎么验证的 → 我踩过的坑
 ```
 
-已沉淀：kube-scheduler 调度流程、Service 与 kube-proxy、Reconcile 幂等与 Finalizer 时序、伸缩决策引擎、controller-gen 的 8 个坑，以及 Pod/Service/etcd 三篇线上排查手册。
+已沉淀：kube-scheduler 调度流程、Service 与 kube-proxy、Reconcile 幂等与 Finalizer 时序、伸缩决策引擎、controller-gen 的 10 个坑，以及 Pod/Service/etcd 三篇线上排查手册。
 
 ## 🛠 技术栈
 
@@ -28,7 +31,7 @@
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)
 
-`controller-runtime` · `client-go` · `kubebuilder` · `PromQL` · `kustomize`
+`controller-runtime` · `client-go` · `kubebuilder` · `PromQL` · `kustomize` · `cosign` · `Kyverno`
 
 ## 📫 联系我
 
