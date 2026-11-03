@@ -33,4 +33,4 @@
 ## 📫 联系我
 
 - Email：2771986015@qq.com
-- 系列技术文章发布在掘金（见 KubeSentry README）
+- 系列技术文章发布在[掘金 @weirong](https://juejin.cn/user/1835559210983642)
