@@ -4,14 +4,15 @@
 
 ## 🔭 正在做：[KubeStasis](https://github.com/weirong-ui/kubestasis)（原名 KubeSentry）
 
-基于 controller-runtime 的 Kubernetes Operator：**Prometheus 多信号弹性伸缩 + 分级故障自愈 + 准入控制**。不满足于 HPA「只伸缩、不自愈」，想做一个能让应用自己变强、自己疗伤的控制系统。
+基于 controller-runtime 的 Kubernetes Operator：**Prometheus 多信号弹性伸缩 + 分级故障自愈 + 准入控制**。不满足于 HPA「只伸缩、不自愈」，想做一个能让应用自己变强、自己疗伤的控制系统。定位是实现研究、**不打算被生产采用**：每条能力都附可复算的实测证据与失败记录，没实测的就标"未实测"。
 
 - ✅ **P0–P4 全部闭环**：`App` CRD → Deployment/Service 自动管理；弹性伸缩（真 Prometheus 打流验证 1→5→1）；分级自愈（CrashLoop → 摘除 → 自动回滚，真集群 + CI 双验证）；金丝雀错误率自动回滚
 - ✅ **Admission Webhook**：禁 latest / 跨字段校验 / 默认值注入，自签证书方案不依赖 cert-manager；cosign keyless 镜像签名 + Kyverno 策略（CKS 证据链）
 - ✅ **手写 mini-Informer**：ListWatch → DeltaFIFO → Store → WorkQueue，约 400 行泛型实现
-- ✅ **AI 推理弹性**：队列深度 / TTFT / KV cache 占用率三信号，vLLM 开箱即用
-- 🧪 **100 个单元测试用例**，CI 四道门：docs / build / e2e（kind 真集群三条链路）/ 多架构镜像
-- 🗓 **进行中**：压测对比表（vs 原生 HPA）、envtest、Helm Chart
+- ✅ **AI 推理弹性**：队列深度 / TTFT / KV cache 占用率三信号，默认 vLLM 指标名（`WithQuery` 可换 SGLang/TGI）——⚠️ 只有单测覆盖，**没在真实 vLLM 集群跑过**
+- ✅ **envtest + Helm Chart**：真实 apiserver 的控制循环回归（创建/回写/删除/漂移 4 条链路）；chart 在真集群 `helm upgrade --install` 验证，自签 / cert-manager 双证书方案
+- ✅ **压测对比 vs 原生 HPA**：同镜像、同资源、同流量时间线，五轮里四轮自废并归档；副本-分钟 −12.5%（原始 CSV 可复算），扩容响应的方差未补齐、只作定性参考——重复实验的判定线已预注册
+- 🧪 **139 个单元测试用例**，CI 六道门：docs / build（含 `-race` 数据竞争检测）/ envtest / chart / e2e（kind 真集群）/ 多架构镜像
 
 ## 📖 学习笔记：[cloud-native-notes](https://github.com/weirong-ui/cloud-native-notes)
 
@@ -35,5 +36,5 @@
 
 ## 📫 联系我
 
-- Email：2771986015@qq.com
-- 系列技术文章发布在[掘金 @weirong](https://juejin.cn/user/1835559210983642)
+- 通过 GitHub Issue / Discussion 交流最有效（也是我唯一公开的联系方式）
+- 系列技术文章发布在掘金，账号同名
