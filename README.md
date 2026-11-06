@@ -10,9 +10,9 @@
 - ✅ **Admission Webhook**：禁 latest / 跨字段校验 / 默认值注入，自签证书方案不依赖 cert-manager；cosign keyless 镜像签名 + Kyverno 策略（CKS 证据链）
 - ✅ **手写 mini-Informer**：ListWatch → DeltaFIFO → Store → WorkQueue，约 400 行泛型实现
 - ✅ **AI 推理弹性**：队列深度 / TTFT / KV cache 占用率三信号，默认 vLLM 指标名（`WithQuery` 可换 SGLang/TGI）——⚠️ 只有单测覆盖，**没在真实 vLLM 集群跑过**
-- ✅ **envtest + Helm Chart**：真实 apiserver 的控制循环回归（创建/回写/删除/漂移 4 条链路）；chart 在真集群 `helm upgrade --install` 验证，自签 / cert-manager 双证书方案
-- ✅ **压测对比 vs 原生 HPA**：同镜像、同资源、同流量时间线，五轮里四轮自废并归档；副本-分钟 −12.5%（原始 CSV 可复算），扩容响应的方差未补齐、只作定性参考——重复实验的判定线已预注册
-- 🧪 **139 个单元测试用例**，CI 六道门：docs / build（含 `-race` 数据竞争检测）/ envtest / chart / e2e（kind 真集群）/ 多架构镜像
+- ✅ **envtest + Helm Chart**：真实 apiserver 的控制循环回归（创建、状态回写、删除放闸、漂移拉回四类链路）；chart 在真集群 `helm upgrade --install` 验证，自签 / cert-manager 双证书方案
+- ✅ **压测对比 vs 原生 HPA**：同镜像、同资源、同流量时间线；前四轮废数据逐轮记了废因，其中一轮连原始 CSV 都没留，报告里如实标"未归档"。扩容响应的方差尚未补齐、只作定性参考——重复实验的判定线已预注册。**具体数字一律以仓库报告为准，这里不复述**
+- 🧪 **单元测试 + CI 门**：docs / build（含 `-race` 数据竞争检测）/ envtest / chart / e2e（kind 真集群）/ 多架构镜像。用例数与最新状态只在[仓库 README](https://github.com/weirong-ui/kubestasis) 维护，这里不写数字（写一次就要同步一次，必然漂）
 
 ## 📖 学习笔记：[cloud-native-notes](https://github.com/weirong-ui/cloud-native-notes)
 
