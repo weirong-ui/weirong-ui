@@ -16,7 +16,7 @@
 
 ## 📖 学习笔记：[cloud-native-notes](https://github.com/weirong-ui/cloud-native-notes)
 
-只记项目里真的用到 / 真的踩到的东西，不抄文档、不背八股。每篇格式固定：
+只记项目里真的用到 / 真的踩到的东西。每篇格式固定：
 
 ```
 机制是什么 → 源码/命令在哪 → 我怎么验证的 → 我踩过的坑
@@ -36,7 +36,7 @@
 
 ## 📫 联系我
 
-- 通过 GitHub Issue / Discussion 交流最有效（也是我唯一公开的联系方式）
+- 通过 GitHub Issue / Discussion 交流最有效
 - 系列技术文章发布在掘金，账号同名
 
 ## 开发方式说明
