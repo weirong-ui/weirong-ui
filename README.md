@@ -50,3 +50,6 @@
 
 上游 PR [#58555](https://github.com/kubernetes/website/pull/58555) 的讨论区中，我曾就 AI 辅助使用
 公开说明并承担责任，附开 PR 前的逐项人工核对记录。若对某段实现或某条数据有疑问，欢迎直接提 issue。
+
+- **CKA** Certified Kubernetes Administrator · The Linux Foundation · 2026.11 · [verify credential](https://www.credly.com/badges/7075ca76-78a9-47b1-84dc-ea59c0f99d96/public_url)
+
