@@ -7,7 +7,7 @@
 基于 controller-runtime 的 Kubernetes Operator：**Prometheus 多信号弹性伸缩 + 分级故障自愈 + 准入控制**。不满足于 HPA「只伸缩、不自愈」，想做一个能让应用自己变强、自己疗伤的控制系统。定位是实现研究、**不打算被生产采用**：每条能力都附可复算的实测证据与失败记录，没实测的就标"未实测"。
 
 - ✅ **P0–P4 全部闭环**：`App` CRD → Deployment/Service 自动管理；弹性伸缩（真 Prometheus 打流验证 1→5→1）；分级自愈（CrashLoop → 摘除 → 自动回滚，真集群 + CI 双验证）；金丝雀错误率自动回滚
-- ✅ **Admission Webhook**：禁 latest / 跨字段校验 / 默认值注入，自签证书方案不依赖 cert-manager；cosign keyless 镜像签名 + Kyverno 策略（CKS 证据链）
+- ✅ **Admission Webhook**：禁 latest / 跨字段校验 / 默认值注入，自签证书方案不依赖 cert-manager；cosign keyless 镜像签名 + Kyverno 策略（按 CKS 考点组织的安全实践）
 - ✅ **手写 mini-Informer**：ListWatch → DeltaFIFO → Store → WorkQueue，约 400 行泛型实现
 - ✅ **AI 推理弹性**：队列深度 / TTFT / KV cache 占用率三信号，默认 vLLM 指标名（`WithQuery` 可换 SGLang/TGI）——⚠️ 只有单测覆盖，**没在真实 vLLM 集群跑过**
 - ✅ **envtest + Helm Chart**：真实 apiserver 的控制循环回归（创建、状态回写、删除放闸、漂移拉回四类链路）；chart 在真集群 `helm upgrade --install` 验证，自签 / cert-manager 双证书方案
@@ -41,18 +41,29 @@
 
 ## 📫 联系我
 
-- 通过 GitHub Issue / Discussion 交流最有效
-- 系列技术文章发布在掘金，账号同名
+- 跑不通、发现文档写错：[开 Issue](https://github.com/weirong-ui/kubestasis/issues/new/choose)，有模板，附 `kubectl get events` 就够
+- 设计、选型、或者想拿它练手：[Discussions](https://github.com/weirong-ui/kubestasis/discussions)
+- 系列技术文章：[掘金 @weirong](https://juejin.cn/user/1835559210983642/posts)
 
 ## 开发方式说明
 
-本项目在开发过程中使用了 AI 编码工具辅助生成与改写代码。设计决策、控制回路结构、
-实验设计与结论判定由我本人做出并负责；所有对外结论都附可复算的数据与失败记录。
+这个项目大量用 AI 辅助。按模块说清楚用在哪，"部分工作由 AI 协助"那种句子读不出信息，等于免责声明。
 
-可核验的痕迹：提交历史中包含多轮 bug 修复与重构（而非一次性导入）、5 轮压测含废轮及废因、
+| 模块 | 分工 |
+|---|---|
+| `internal/controller`（Reconcile、status 回写、Finalizer 时序） | 骨架我写；冲突重试、删除放闸、条件竞态这些边界由 AI 起草，我逐行改 |
+| `internal/scaler` / `internal/healer` | 语义我定：取最紧急者、迟滞只挡缩容、窗口状态放 status、`BelowTarget` 三态、分级顺序；实现与单测 AI 起草，我改 |
+| `internal/webhook` | AI 起草；校验规则与默认值我定 |
+| `pkg/miniinformer`（约 400 行泛型 ListWatch/DeltaFIFO/WorkQueue） | 我写；AI 用来对照 client-go 源码讲解 |
+| `test/envtest`、`test/e2e` | 断言我定；样板 AI 起草 |
+| `hack/`（报告复算、方差预检、文档一致性门） | AI 起草，口径我复核 |
+| `docs/`、掘金文章 | 我写；AI 润色，数字与结论我回原始 CSV 核 |
+
+一条底线：AI 写下的每个"已验证"都要有对应的命令输出，没有就删。STATUS 里那些"未实测"就是这条底线的产物。
+
+可核验的痕迹：提交历史是多轮修复与重构（而非一次性导入）、5 轮压测含废轮及废因、
 `hack/variance_precheck.py` 可对现有 CSV 独立重跑、重复实验的判定线在数据落盘前已预注册锁定。
-`docs/STATUS.md` 明列「已知不解决的问题」，未实测的能力（如真实 vLLM 集群上的推理信号）一律标注「未实测」。
+`docs/STATUS.md` 明列「已知不解决的问题」。
 
-上游 PR [#58555](https://github.com/kubernetes/website/pull/58555) 的讨论区中，我曾就 AI 辅助使用
-公开说明并承担责任，附开 PR 前的逐项人工核对记录。若对某段实现或某条数据有疑问，欢迎直接提 issue。
+上游 PR [#58555](https://github.com/kubernetes/website/pull/58555) 的讨论区里，我就 AI 辅助使用做过公开说明并附开 PR 前的人工核对记录。对某段实现或某条数据有疑问，直接开 issue 就行。
 
